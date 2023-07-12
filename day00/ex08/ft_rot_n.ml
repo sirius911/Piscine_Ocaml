@@ -20,18 +20,21 @@ let ft_rot_n n str =
     
     let rec loop str i =
         if i = 0 then
-            String.map fonction str
+            str
         else
-          begin
-            str = (String.map fonction str);
-            loop str (i - 1)
-          end
+            String.map fonction (loop str (i - 1))
     in
     loop str n
 
 
 
 let main () = 
-    print_endline (ft_rot_n 10 "abcdefg")
+    print_endline (ft_rot_n 1 "bcdefghijklmnopqrstuvwxyza");
+    print_endline(ft_rot_n 13 "nopqrstuvwxyzabcdefghijklm");
+    print_endline(ft_rot_n 42 "0123456789");
+    print_endline(ft_rot_n 2 "OI2EAS67B9");
+    print_endline(ft_rot_n 0 "Damned !");
+    print_endline(ft_rot_n 42 "" );
+    print_endline(ft_rot_n 1  "NBzlk qnbjr !")
 
 let () = main ()
