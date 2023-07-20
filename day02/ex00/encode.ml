@@ -6,7 +6,7 @@
 (*   By: clorin <clorin@student.42.fr>              +#+  +:+       +#+        *)
 (*                                                +#+#+#+#+#+   +#+           *)
 (*   Created: 2023/07/20 09:03:46 by clorin            #+#    #+#             *)
-(*   Updated: 2023/07/20 11:00:15 by clorin           ###   ########.fr       *)
+(*   Updated: 2023/07/20 14:27:36 by clorin           ###   ########.fr       *)
 (*                                                                            *)
 (* ************************************************************************** *)
 
@@ -24,27 +24,18 @@ let rec afficher_liste = function
   print_char ';';
   afficher_liste queue
 
-let rec encode l = 
-    let rec is_value_present value lst =
-      match lst with
-      | [] -> false
-      | (_, x) :: queue -> x = value || is_value_present value queue
-    in
-    let rec compte l c = match l with
-      | [] -> 0
-      | head::queue when head = c -> 1 + compte queue c
-      | _::queue -> 0
-    in
-    let rec process l result = match l with
-      | [] ->  List.rev result
-      | head::queue -> 
-        if is_value_present head result then
-          process queue result
-        else
-          process queue (((compte l head), head):: result)
-    in
-    process l []
-    
+let encode l =
+  let rec count_letter l count result = match l with
+    | first_letter::second_letter::queue ->
+      if (first_letter = second_letter) then
+        count_letter (second_letter::queue) (count + 1) result
+      else
+        count_letter (second_letter::queue) 0 (result @ [(count + 1), first_letter])
+    | letter::queue -> result @ [(count + 1), letter]
+    | [] -> result
+  in 
+  count_letter l 0 []
+
 let rec affiche_liste_tupple liste = match liste with
     | [] -> ()
     | head::queue ->
@@ -53,7 +44,7 @@ let rec affiche_liste_tupple liste = match liste with
         affiche_liste_tupple queue
 
 let main () = 
-  let ma_liste = ['a';'a';'a';'b';'b';'c'] in
+  let ma_liste = ['a';'a';'a';'b';'b';'c';'a'] in
   print_string "liste = [";
   afficher_liste ma_liste;
   print_endline "]";
