@@ -6,12 +6,12 @@
 (*   By: clorin <clorin@student.42.fr>              +#+  +:+       +#+        *)
 (*                                                +#+#+#+#+#+   +#+           *)
 (*   Created: 2023/08/30 21:48:41 by clorin            #+#    #+#             *)
-(*   Updated: 2023/08/30 22:50:21 by clorin           ###   ########.fr       *)
+(*   Updated: 2023/09/01 19:43:11 by clorin           ###   ########.fr       *)
 (*                                                                            *)
 (* ************************************************************************** *)
-(*14,53*)
-type 'a tree = Nil | Node of 'a * 'a tree * 'a tree
 
+type 'a tree = Nil | Node of 'a * 'a tree * 'a tree
+  
 let rec height (t: 'a tree) : int = match t with
   | Nil -> 0
   | Node (_, Nil, Nil) -> 0
@@ -33,25 +33,17 @@ let is_bst (t : 'a tree) : bool =
         (get_list_of_tree (left)) @ [a] @ (get_list_of_tree (right))
   in
   is_sorted (get_list_of_tree t)
-
-(* let rec is_perfect (t : 'a tree) : bool =
-  match t with
-  | Nil -> true
-  | Node(a, Nil, Nil) -> true
-  | Node(a, Nil, b) | Node(a, b, Nil) -> false
-  | Node(a, left, right) -> is_perfect left && is_perfect right *)
    
-
-let is_perfect (tree : 'a tree) : bool =
-  let h = height tree in
+let is_perfect (t : 'a tree) : bool =
+  let h = height t in
   let rec loop (t: 'a tree) (depth : int) (current_depth : int) : bool =
-    match tree with
+    match t with
     | Nil -> current_depth = depth
     | Node (_, left, right) ->
       loop left depth (current_depth + 1) &&
       loop right depth (current_depth + 1)
   in
-  loop tree h 0
+  loop t h 0
 
 let rec is_balanced (t : 'a tree) : bool = match t with
   | Nil -> true
@@ -104,6 +96,22 @@ let main () =
   print_bst t;
   Printf.printf " -> %b => " (is_bst t);
   Printf.printf "%b **> " (is_perfect t);
-  Printf.printf "%b\n" (is_balanced t)
+  Printf.printf "%b\n" (is_balanced t);
+
+  let balanced_tree =
+    Node(4,
+      Node(2,
+        Node(1, Nil, Nil),
+        Node(3, Nil, Nil)
+      ),
+      Node(6,
+        Node(5, Nil, Nil),
+        Node(7, Nil, Nil)
+      )
+    ) in
+  print_bst t;
+  Printf.printf " -> %b => " (is_bst balanced_tree);
+  Printf.printf "%b **> " (is_perfect balanced_tree);
+  Printf.printf "%b\n" (is_balanced balanced_tree)
 
 let () = main ()
