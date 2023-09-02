@@ -86,9 +86,31 @@ let add_bst (t : 'a tree) (value : 'a) : ('a tree) =
       t
     end
 
-let delete_bst (t : 'a tree) (value : 'a) : ('a tree) = 
+let delete_bst (t : 'a tree) (value : 'a) : ('a tree) =
+  let rec find_min (t : 'a tree) = 
+    match t with
+    | Nil -> None
+    | Node(value, Nil, _) -> Some value
+    | Node(_, left, _) -> find_min left
+  in
+  let rec delete (t : 'a tree) (value : 'a) : ('a tree) =
+    match t with
+    | Nil -> Nil
+    | Node(v, left, right) -> (*Node*)
+      if value < v then Node(v, delete left value, right) (*value on left*)
+      else if value > v then Node (v, left, delete right value) (*value en right*)
+      else (*value found*)
+        match (left, right) with 
+        | (Nil, _) -> right
+        | (_, Nil) -> left
+        | _ ->
+          let minValueOpt = find_min right in
+          match minValueOpt with
+          | None -> Node (v, left, Nil)
+          | Some minvalue -> Node (minvalue, left, delete right  minvalue)
+  in
   if is_bst t then
-    t
+    delete t value
   else  
     begin
       print_endline("the tree must be a BST !");
@@ -96,14 +118,17 @@ let delete_bst (t : 'a tree) (value : 'a) : ('a tree) =
     end
 
 let main () = 
-  let t = Node (10, Node (7, Nil, Node(13, Nil, Nil)), Node (11, Nil, Node (12, Node (50, Nil, Nil), Nil))) in (* false *)
-  
-  let rec print_bst t =
-    match t with
-      Node (a,b,c) -> Printf.printf "(%d " a; print_bst b; print_bst c; Printf.printf ")"
-    | Nil -> Printf.printf "Nil ";
+  let print_bst t =
+    let rec print (t : 'a tree) =
+      match t with
+        Node (a,left,right) -> Printf.printf "(%d " a; print left; print right; Printf.printf ")"
+      | Nil -> Printf.printf "Nil ";
+    in
+  print t;
+  print_endline "\n"
   in
 
+  let t = Node (10, Node (7, Nil, Node(13, Nil, Nil)), Node (11, Nil, Node (12, Node (50, Nil, Nil), Nil))) in (* false *)
   print_bst t;
   Printf.printf " -> %b => " (is_bst t);
   Printf.printf "%b **> " (is_perfect t);
@@ -171,6 +196,16 @@ let main () =
   let value_search = 42 in 
   Printf.printf "%d in tree = %b\n" value_search (search_bst balanced_tree value_search);
   let t = add_bst balanced_tree 0 in
-  print_bst t
+  print_bst t;
+  let t = delete_bst t 5 in
+  print_endline "------";
+  print_bst t;
+  print_endline "------";
+  let t = delete_bst t 1 in
+  print_bst t;
+  print_endline "------";
+  let t = add_bst t 1 in
+  print_bst t;
+  print_endline "------"
   
 let () = main ()
