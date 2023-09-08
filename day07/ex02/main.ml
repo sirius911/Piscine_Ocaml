@@ -1,7 +1,7 @@
 (* ************************************************************************** *)
 (*                                                                            *)
 (*                                                        :::      ::::::::   *)
-(*   people.ml                                          :+:      :+:    :+:   *)
+(*   main.ml                                            :+:      :+:    :+:   *)
 (*                                                    +:+ +:+         +:+     *)
 (*   By: clorin <clorin@student.42.fr>              +#+  +:+       +#+        *)
 (*                                                +#+#+#+#+#+   +#+           *)
@@ -10,12 +10,13 @@
 (*                                                                            *)
 (* ************************************************************************** *)
 
-class people (name : string) = 
-  object
-      val _name : string = name
-      val _hp : int = 100
-      initializer print_endline "A people is created"
-      method to_string = "Name : " ^ _name ^ " hp = " ^ string_of_int (_hp)
-      method talk = Printf.printf "I'm %s ! Do you know the Doctor ?\n" _name
-      method die = print_endline "Aaaarghh!"
-end
+let () =
+  let doctor = new Doctor.doctor ("Who") 42 (new People.people ("Cyrille")) in
+  let dalek = new Dalek.dalek in
+  let people = new People.people ("Max") in
+  print_endline dalek#to_string;
+  dalek#talk;
+  dalek#exterminate people;
+  print_endline dalek#to_string;
+  doctor#use_sonic_screwdriver;
+  dalek#die;

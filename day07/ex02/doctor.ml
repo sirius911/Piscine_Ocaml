@@ -21,8 +21,8 @@ class doctor (name : string) (age : int) (people : People.people)=
     method use_sonic_screwdriver:unit = 
       print_endline "Whiiiiwhiiiwhiii Whiiiiwhiiiwhiii Whiiiiwhiiiwhiii"
     method to_string:string = 
-      "Doctor "^_name^" hp = "^string_of_int (_hp)^", age = "^string_of_int(_age)^", Sidekick = ["^_sidekick#to_string^"]"
-    method travel_in_time (start : int) (arrival : int) = 
+      "Doctor "^_name^" hp = "^string_of_int (_hp)^", age = "^string_of_int(_age)^", Sidekick = ["^_sidekick#to_string^"]\n"
+    method travel_in_time (start : int) (arrival : int) : unit = 
     print_endline "
                 _.--._
                 _|__|_

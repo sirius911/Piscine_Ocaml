@@ -17,5 +17,5 @@ class people (name : string) =
       initializer print_endline "A people is created"
       method to_string = "Name : " ^ _name ^ " hp = " ^ string_of_int (_hp)
       method talk = Printf.printf "I'm %s ! Do you know the Doctor ?\n" _name
-      method die = Printf.printf "Aaaarghh!"
+      method die = print_endline "Aaaarghh!"
 end
